@@ -4,33 +4,42 @@ fetch("escapeGame.json")
     .then(data => {
         console.log('Données récupérées avec succès :', data);
 
+        const header = document.querySelector('header');
+      const main = document.querySelector('main');
+      const footer = document.querySelector('footer');
+
         const Titre = document.createElement("h1");
         Titre.textContent = `${data.entreprise.nomCommercial}`;
-        document.body.appendChild(Titre);
+        header.appendChild(Titre);
         console.log(Titre);
 
         const deuxTitre = document.createElement("h2")
         deuxTitre.textContent = `${data.entreprise.phraseAccroche}  ${data.entreprise.texteAppelAction}`;
-        document.body.appendChild(deuxTitre);
+        header.appendChild(deuxTitre);
         console.log(deuxTitre);
 
-        const Bouton = document.createElement("button")
+        const Bouton = document.createElement("button");
+        Bouton.setAttribute('id','Reservez');
+        Bouton.addEventListener('click', function(event){
+            window.location.href = 'index.html#Bouton'
+    });
         Bouton.textContent = `${data.entreprise.texteAppelAction}`;
-        document.body.appendChild(Bouton);
+       header.appendChild(Bouton);
         console.log(Bouton);
 
         const liste = document.createElement("ul");
-        document.body.appendChild(liste);
+        main.appendChild(liste);
 
         data.entreprise.avantagesClients.forEach(element => {
             console.log(element);
             const li = document.createElement("li");
             li.textContent = element;
-            document.body.appendChild(li);
+            main.appendChild(li);
         });
 
         const listeActivites = document.createElement("ul");
-        document.body.appendChild(listeActivites);
+        listeActivites.setAttribute('id','Choix')
+        main.appendChild(listeActivites);
         data.entreprise.activites.forEach(index => {
             const titreActivite = document.createElement('h3');
             titreActivite.textContent = `${index.nom}`;
@@ -49,8 +58,9 @@ fetch("escapeGame.json")
             listeActivites.appendChild(paragrapheActivites);
         })
         const listeTemoignages = document.createElement("ul");
+        listeTemoignages.setAttribute('id','Témoignages')
 
-        document.body.appendChild(listeTemoignages);
+        main.appendChild(listeTemoignages);
         data.entreprise.temoignages.forEach(index => {
 
             const titrePrenom = document.createElement('h3');
@@ -68,4 +78,10 @@ fetch("escapeGame.json")
             divisionTemoignages.appendChild(imageTemoignages);
             listeTemoignages.appendChild(paragrapheTemoignages);
         })
+
+        var map = L.map('map').setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
     });
